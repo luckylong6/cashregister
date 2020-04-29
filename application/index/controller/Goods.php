@@ -4,13 +4,15 @@ namespace app\index\controller;
 
 use app\index\logic\Goods as GoodsLogic;
 use think\facade\Request;
+use app\index\logic\GoodsCar;
 
 class Goods extends Common
 {
-    public function __construct(GoodsLogic $GoodsLogic)
+    public function __construct(GoodsLogic $GoodsLogic, GoodsCar $goodsCar)
     {
         parent::__construct();
         $this->logic = $GoodsLogic;
+        $this->goodcar = $goodsCar;
     }
     // 商品列表
     public function goodList()
@@ -27,11 +29,12 @@ class Goods extends Common
     }
 
     // 商品添加或者更新
-    public function goodAdd() {
-        if(Request::isAjax()) {
+    public function goodAdd()
+    {
+        if (Request::isAjax()) {
             $param = Request::param();
             $res = $this->logic->goodAdd($param);
-            if($res === false) {
+            if ($res === false) {
                 return \json(['code' => $this->logic->error()['code'], 'msg' => $this->logic->error()['msg']]);
             }
             return \json(['code' => 200, 'msg' => '操作成功']);
@@ -40,5 +43,18 @@ class Goods extends Common
         $good_row = $this->logic->goodRow($good_id);
         $this->assign('good_row', $good_row);
         return view('goodadd');
+    }
+
+    // 商品添加到购物车3
+    public function addGoodCar()
+    {
+
+        $good_id = Request::post('good_id');
+        $store_id = 1;
+        $res = $this->goodcar->addGoodCar($good_id, $store_id);
+        if ($res === false) {
+            return \json(['code' => $this->goodcar->error()['code'], 'msg' => $this->goodcar->error()['msg']]);
+        }
+        return \json(['code' => 200, 'msg' => '添加成功']);
     }
 }

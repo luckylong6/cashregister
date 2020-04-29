@@ -26,9 +26,8 @@
                     <th>id</th>
                     <th>商品名称</th>
                     <th>商品类型</th>
-                    <th>库存数量</th>
-                    <th>商品价钱</th>
-                    <th>状态</th>
+                    <th>购买数量</th>
+                    <th>商品总价钱</th>
                     <th>创建时间</th>
                     <th>操作</th>
                 </tr>
@@ -56,10 +55,10 @@
                     <td>{:date("Y-m-d H:i:s", $item['create_time'])}</td>
                     <td>
                         <a href="{:url('/index/goods/goodAdd')}&good_id={$item.id}">
-                            <span class="layui-btn layui-btn-radius layui-btn-normal">修改</span>
+                            修改
                         </a>
-                        <a class="addgoodcar" data_id="{$item.id}" data_url="{:url('/index/goods/addGoodCar')}">
-                            <span class="layui-btn layui-btn-radius">添加到购物车</span>
+                        <a href="{:url('/index/goods/goodAdd')}&good_id={$item.id}">
+                            添加到购物车
                         </a>
                     </td>
                 </tr>
@@ -77,25 +76,6 @@
     <script src="__PUBLIC_STATIC__/jquery/jquery.min.js"></script>
     <script src="__PUBLIC_STATIC__/layui/layui.js"></script>
     <script src="__PUBLIC_STATIC__/bootstrap/js/bootstrap.min.js"></script>
-    <script>
-        // lyui组件
-    layui.use(['form', 'element'], function () {
-        // var form = layui.form,
-        var form = layui.form,
-            layer = layui.layer;
-        $(".addgoodcar").on('click', function() {
-            $.post($(this).attr('data_url'), {good_id:$(this).attr("data_id")}, function(res) {
-                if(res.code !== 200) {
-                    layer.msg(res.msg, {time:2000});
-                } else {
-                    layer.msg('添加成功', {time:2000}, function() {
-                        location.reload();
-                    });
-                }
-            })
-        })
-    })
-    </script>
 </body>
 
 </html>
