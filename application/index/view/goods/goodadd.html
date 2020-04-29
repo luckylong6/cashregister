@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品修改</title>
+    <link rel="stylesheet" href="__PUBLIC_STATIC__/layui/css/layui.css">
+    <link rel="stylesheet" href="__PUBLIC_STATIC__/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="layui-admin-body">
+        <form class="layui-form" action="{:url('/index/goods/goodAdd')}" lay-filter="example" method="post"
+            id="form-update">
+            <input type="hidden" name="id" value="{$good_row.id}">
+            <div class="layui-form-item">
+                <label class="layui-form-label">* 商品名称：</label>
+                <div class="layui-input-block w200">
+                    <input type="text" name="name" placeholder="请输入商品名称" class="layui-input"
+                        value="{$good_row['name']}" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">* 商品类型：</label>
+                <div class="layui-input-block w200">
+                    <select name="type" lay-filter="categoryId">
+                        <option value="">请选择</option>
+                        <option value="1" {if $good_row.type == '1'}selected{/if}>食物</option>
+                        <option value="2" {if $good_row.type == '2'}selected{/if}>家具</option>
+                        <option value="3" {if $good_row.type == '3'}selected{/if}>电器</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品库存：</label>
+                <div class="layui-input-block w500">
+                    <input type="identifier" name="inventory_num" placeholder="请输入商品库存"
+                        autocomplete="off" class="layui-input" value="{$good_row['inventory_num']}" />
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">* 商品价格：</label>
+                <div class="layui-input-block w200">
+                    <input type="number" name="price" placeholder="请输入商品价格" autocomplete="off"
+                        class="layui-input" value="{$good_row['price']}" />
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">* 商品状态：</label>
+                <div class="layui-input-block w200">
+                    <input type="radio" name="status" value="1" title="正常" {if $good_row['status'] == 1} checked{/if}>
+                    <input type="radio" name="status" value="2" title="下架" {if $good_row['status'] == 2} checked{/if}>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    {:token()}
+                    <button class="layui-btn layui-btn-sm" lay-submit lay-filter="formSubmit">保存</button>
+                    <a class="layui-btn layui-btn-sm" href="javascript:history.back(-1);">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+<script src="__PUBLIC_STATIC__/jquery/jquery.min.js"></script>
+<script src="__PUBLIC_STATIC__/layui/layui.js"></script>
+<script src="__PUBLIC_STATIC__/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    // lyui组件
+    layui.use(['form', 'element'], function () {
+        // var form = layui.form,
+        var form = layui.form,
+            layer = layui.layer;
+
+            $('#form-update').on('submit', function () {
+                $.post($(this).prop('action'), $(this).serialize()).then(function (res) {
+                    if (res.code == 200) {
+                        layer.msg('操作成功！', {time:2000}, function() {
+                            location.href = "{:url('/index/goods/goodlist')}";
+                        });
+                    } else {
+                        layer.msg(res.msg,{time:2000});
+                    }
+                }).fail(function (e) {
+                    alert('服务器繁忙，请稍后重试');
+                })
+                return false;
+            })
+    });
+</script>
+
+</html>

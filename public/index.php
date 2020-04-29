@@ -20,6 +20,7 @@ require __DIR__ . '/../thinkphp/base.php';
 
 
 // 支持事先使用静态方法设置Request对象和Config对象
-
+defined("PUBLIC_STATIC") ?: define("PUBLIC_STATIC", "/static");
+// defined('URI_PATH') ?: define('URI_PATH', '/public');
 // 执行应用并响应
 Container::get('app')->run()->send();

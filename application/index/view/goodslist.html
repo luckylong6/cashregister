@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试</title>
+    <link href="__STATIC__/layui/css/layui.css">
+</head>
+<body>
+    {notempty name="goodslist"}
+        {volist name="goodslist" id="item"}
+            {$item['name']}
+        {/volist}
+        {$goodslist|raw}
+    {/notempty}
+    <div>
+        {if empty($goodslist)}
+            暂无数据！
+        {/if}
+    </div>
+    <script src="__STATIC__/layui/layui.js">
+
+    </script>
+</body>
+</html>

@@ -32,4 +32,9 @@ return [
     'taglib_begin' => '{',
     // 标签库标签结束标记
     'taglib_end'   => '}',
+    'default_filter' => 'htmlspecialchars',
+    'tpl_replace_string' => [
+        '__PUBLIC_STATIC__' => PUBLIC_STATIC,
+        '__URL_PATH__' => URL_PATH,
+    ],
 ];

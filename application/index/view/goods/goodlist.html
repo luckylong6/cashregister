@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试</title>
+    <link rel="stylesheet" href="__PUBLIC_STATIC__/layui/css/layui.css">
+    <link rel="stylesheet" href="__PUBLIC_STATIC__/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="layui-admin-body">
+        <div class="layui-input-block ml0 mb10">
+            
+            <a class="layui-btn" href="{:url('/index/goods/goodAdd')}" >增加商品</a>
+            
+        </div>
+        <table class="layui-table">
+            <colgroup>
+                <col width="150">
+                <col width="200">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>商品名称</th>
+                    <th>商品类型</th>
+                    <th>库存数量</th>
+                    <th>商品价钱</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {notempty name="goodlist"}
+                {volist name="goodlist" id="item"}
+                <tr>
+                    <td>{$item['id']}</td>
+                    <td>{$item['name']}</td>
+                    <td>{switch $item['type']}
+                        {case:1}食物{/case}
+                        {case:2}家具{/case}
+                        {case:3}电器{/case}
+                        {/switch}
+                    </td>
+                    <td>{$item['inventory_num']}</td>
+                    <td>{$item['price']}</td>
+                    <td>{if $item['status'] == 1} 
+                            <span class="layui-btn layui-btn-normal">上架</span>
+                        {else /}
+                            <span class="layui-btn layui-btn-primary">下架</span>
+                        {/if}
+                    </td>
+                    <td>{:date("Y-m-d H:i:s", $item['create_time'])}</td>
+                    <td>
+                        <a href="{:url('/index/goods/goodAdd')}&good_id={$item.id}">
+                            修改
+                        </a>
+                        <a href="{:url('/index/goods/goodAdd')}&good_id={$item.id}">
+                            添加到购物车
+                        </a>
+                    </td>
+                </tr>
+                {/volist}
+                {/notempty}
+                {if empty($goodlist)}
+                <tr>
+                    <td colspan="11" class="layui-admin-empty-table">列表数据为空</td>
+                </tr>
+                {/if}
+            </tbody>
+        </table>
+        {$page|raw}
+    </div>
+    <script src="__PUBLIC_STATIC__/jquery/jquery.min.js"></script>
+    <script src="__PUBLIC_STATIC__/layui/layui.js"></script>
+    <script src="__PUBLIC_STATIC__/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
