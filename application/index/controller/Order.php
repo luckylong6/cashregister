@@ -5,7 +5,7 @@ namespace app\index\controller;
 use app\index\logic\Order as OrderLogic;
 use app\index\logic\OrderBindGood;
 use app\index\logic\GoodsCar;
-use think\Request;
+use think\facade\Request;
 
 class Order extends Common
 {
@@ -27,6 +27,11 @@ class Order extends Common
         if(isset($param['store_id']) && !empty($param['store_id'])) {
             $good_list = $this->goodcar->showOrderRow($param['store_id']);
         }
+        $this->assign('order_id', isset($param['order_id']) ? $param['order_id'] : 0);
+        $this->assign('store_id', isset($param['store_id']) ? $param['store_id'] : 0);
+        $this->assign('goodlist', $good_list);
         return view('order/goodcar');
     }
+
+    
 }

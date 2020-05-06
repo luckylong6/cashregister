@@ -45,10 +45,9 @@ class Goods extends Common
         return view('goodadd');
     }
 
-    // 商品添加到购物车3
+    // 商品添加到购物车
     public function addGoodCar()
     {
-
         $good_id = Request::post('good_id');
         $store_id = 1;
         $res = $this->goodcar->addGoodCar($good_id, $store_id);
@@ -56,5 +55,14 @@ class Goods extends Common
             return \json(['code' => $this->goodcar->error()['code'], 'msg' => $this->goodcar->error()['msg']]);
         }
         return \json(['code' => 200, 'msg' => '添加成功']);
+    }
+
+    // 修改购物车或者订单的商品信息
+    public function changeGood() {
+        $param = Request::param();
+        $res = $this->logic->changeGood($param);
+        if($res === false) {
+            return \json(['code' => $this->order->error()['code'], 'msg' => $this->order->error()['msg']]);
+        }
     }
 }

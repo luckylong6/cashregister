@@ -9,7 +9,7 @@ class GoodsCar extends Common
         $good_list = $this->alias('gc')
         ->leftJoin('goods g', 'g.id = gc.good_id')
         ->where(['gc.store_id' => $store_id])
-        ->field(['gc.good_num, gc.good_price, g.name'])
+        ->field(['gc.good_num, gc.good_price, g.name, g.type, gc.id'])
         ->paginate(10);
         return $good_list;
     }

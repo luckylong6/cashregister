@@ -3,13 +3,14 @@
 namespace app\index\logic;
 
 use app\index\model\Goods as GoodsModel;
-use think\Validate;
+use app\index\model\GoodsCar;
 
 class Goods
 {
-    public function __construct(GoodsModel $GoodsModel)
+    public function __construct(GoodsModel $GoodsModel, GoodsCar $goodsCar)
     {
         $this->model = $GoodsModel;
+        $this->goodscar = $goodsCar;
     }
     public function error()
     {
@@ -76,5 +77,25 @@ class Goods
     {
         $row = $this->model->goodRow($good_id);
         return $row;
+    }
+
+    // 修改购物车或者订单商品信息
+    public function changeGood($param)
+    {
+        if (isset($param['order_id']) && !empty($param['order_id'])) {
+
+            $res = $this->order->changeGood($param);
+            if ($res === false) {
+                $this->error = ['code' => $this->order->getError()['code'], 'msg' => $this->order->getError()['msg']];
+                return false;
+            }
+        }
+        if (isset($param['store_id']) && !empty($param['store_id'])) {
+            $res = $this->goodscar->changeGood($param);
+            if ($res === false) {
+                $this->error = ['code' => $this->goodscar->getError()['code'], 'msg' => $this->goodscar->getError()['msg']];
+                return false;
+            }
+        }
     }
 }
