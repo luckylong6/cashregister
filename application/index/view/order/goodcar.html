@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>测试</title>
+    <title>购物车</title>
     <link rel="stylesheet" href="__PUBLIC_STATIC__/layui/css/layui.css">
     <link rel="stylesheet" href="__PUBLIC_STATIC__/bootstrap/css/bootstrap.min.css">
 </head>
@@ -13,8 +13,8 @@
     <div class="layui-admin-body">
         <div class="layui-input-block ml0 mb10">
             <a class="layui-btn" href="{:url('/index/goods/goodAdd')}">增加商品</a>
-            <a class="layui-btn"
-                href="{:url('/index/order/showOrderRow',['order_id' => $_GET['order_id'] ?? 0])}">查看购物车</a>
+            <a class="layui-btn" href="{:url('/index/goods/goodList')}?store_id={$_GET['store_id']?:0}?order_id={$_GET['order_id']?:0}">购物车添加商品</a>
+            <a class="layui-btn" href="{:url('/index/order/showOrderRow',['order_id' => isset($_GET['order_id']) ?$_GET['order_id']: 0])}">查看购物车</a>
         </div>
         <table class="layui-table">
             <colgroup>
@@ -45,19 +45,25 @@
                         {/switch}
                     </td>
                     <td>
-                        <a data-url="{:url('/index/goods/changeGood')}?good_change='add'" data-id="{$item['id']}"
-                            class="good-change-btn">
-                            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
-                                <i class="layui-icon">&#xe654;</i>
-                            </button>
-                        </a>
-                        &nbsp;{$item['good_num']}&nbsp;
-                        <a data-url="{:url('/index/goods/changeGood')}?good_change='reduce'" class="good-change-btn"
-                            data-id="{$item['id']}">
-                            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
-                                <i class="layui-icon">&#xe67e;</i>
-                            </button>
-                        </a>
+                        <div class="change-num-div">
+                            <a data-url="{:url('/index/goods/changeGood')}?good_change=add" data-id="{$item['id']}"
+                                class="good-change-btn">
+                                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+                                    <i class="layui-icon">&#xe654;</i>
+                                </button>
+                            </a>
+                            &nbsp;
+                            <span class="show-num" data-num="{$item['good_num']}">
+                                {$item['good_num']}
+                            </span>
+                            &nbsp;
+                            <a data-url="{:url('/index/goods/changeGood')}?good_change=reduce" class="good-change-btn"
+                                data-id="{$item['id']}">
+                                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+                                    <i class="layui-icon">&#xe67e;</i>
+                                </button>
+                            </a>
+                        </div>
                     </td>
                     <td>{$item['good_price']}</td>
                     <td>
@@ -91,11 +97,12 @@
                 var order_id = $('.order_id').val();
                 var store_id = $('.store_id').val();
                 var id = $(this).attr('data-id');
-                $.post($(this).attr('data-url'), { id: $(this).attr('data-id'), order_id: order_id, store_id: store_id }, function (res) {
+                $.post($(this).attr('data-url'), { order_bind_good_id: $(this).attr('data-id'), order_id: order_id, store_id: store_id }, function (res) {
+                    console.log(res);
                     if (res.code !== 200) {
                         layer.msg(res.msg, { time: 2000 });
                     } else {
-                        layer.msg('操作成功', { time: 2000 });
+                        location.reload();
                     }
                 })
             })

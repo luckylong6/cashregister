@@ -12,8 +12,10 @@
 <body>
     <div class="layui-admin-body">
         <div class="layui-input-block ml0 mb10">
+            <input type="hidden" class="store_id" value="{:isset($_GET['store_id']) ? $_GET['store_id'] : 0}">
+            <input type="hidden" class="order_id" value="{:isset($_GET['order_id']) ? $_GET['order_id'] : 0}">
             <a class="layui-btn" href="{:url('/index/goods/goodAdd')}">增加商品</a>
-            <a class="layui-btn" href="{:url('/index/order/showOrderRow',['order_id' => $_GET['order_id'] ?? 0])}">查看购物车</a>
+            <button class="layui-btn" id="showOrderRow">查看购物车</button>
         </div>
         <table class="layui-table">
             <colgroup>
@@ -48,9 +50,9 @@
                     <td>{$item['inventory_num']}</td>
                     <td>{$item['price']}</td>
                     <td>{if $item['status'] == 1} 
-                            <span class="layui-btn layui-btn-normal">上架</span>
+                        <span class="layui-btn layui-btn-normal">上架</span>
                         {else /}
-                            <span class="layui-btn layui-btn-primary">下架</span>
+                        <span class="layui-btn layui-btn-primary">下架</span>
                         {/if}
                     </td>
                     <td>{:date("Y-m-d H:i:s", $item['create_time'])}</td>
@@ -79,10 +81,10 @@
     <script src="__PUBLIC_STATIC__/bootstrap/js/bootstrap.min.js"></script>
     <script>
         // lyui组件
-    layui.use(['form', 'element'], function () {
+        layui.use(['form', 'element'], function () {
         // var form = layui.form,
         var form = layui.form,
-            layer = layui.layer;
+        layer = layui.layer;
         $(".addgoodcar").on('click', function() {
             $.post($(this).attr('data_url'), {good_id:$(this).attr("data_id")}, function(res) {
                 if(res.code !== 200) {
@@ -94,8 +96,21 @@
                 }
             })
         })
+        $('#showOrderRow').on('click', function() {
+            var order_id = $('.order_id').val();
+            var store_id = $('.store_id').val();
+            var url_param = '';
+            if(order_id != '') {
+                url_param = url_param + '&order_id=' + order_id;
+            }
+            if(store_id != '') {
+                url_param = url_param + '&store_id=' + store_id;
+            }
+            location.href = "{:url('/index/order/showOrderRow')}" + url_param;
+        })
+
     })
-    </script>
+</script>
 </body>
 
 </html>

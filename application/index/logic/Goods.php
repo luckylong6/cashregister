@@ -4,13 +4,16 @@ namespace app\index\logic;
 
 use app\index\model\Goods as GoodsModel;
 use app\index\model\GoodsCar;
+use app\index\model\OrderBindGood as OrderBindGoodModel;
 
 class Goods
 {
-    public function __construct(GoodsModel $GoodsModel, GoodsCar $goodsCar)
+    protected $goodsCar,$GoodsModel,$OrderBindGood;
+    public function __construct(GoodsModel $GoodsModel, GoodsCar $goodsCar, OrderBindGoodModel $OrderBindGood)
     {
         $this->model = $GoodsModel;
         $this->goodscar = $goodsCar;
+        $this->orderbindgood = $OrderBindGood;
     }
     public function error()
     {
@@ -79,14 +82,18 @@ class Goods
         return $row;
     }
 
-    // 修改购物车或者订单商品信息
+   /** 
+     * 修改购物车或者订单中的商品数量或者删除商品
+     * @param:array(good_change， order_id/store_id, order_bind_good_id)，good_change：reduce减少，add增加，all删除。order_id/store_id:展示的是订单表还是购物车表;order_bind_good_id:订单绑定商品id
+     * @return：array('code', 'msg');
+     * */
     public function changeGood($param)
     {
         if (isset($param['order_id']) && !empty($param['order_id'])) {
 
-            $res = $this->order->changeGood($param);
+            $res = $this->orderbindgood->changeGood($param);
             if ($res === false) {
-                $this->error = ['code' => $this->order->getError()['code'], 'msg' => $this->order->getError()['msg']];
+                $this->error = ['code' => $this->orderbindgood->getError()['code'], 'msg' => $this->orderbindgood->getError()['msg']];
                 return false;
             }
         }

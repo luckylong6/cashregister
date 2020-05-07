@@ -49,8 +49,11 @@ class Goods extends Common
     public function addGoodCar()
     {
         $good_id = Request::post('good_id');
+        $param = Request::post();
         $store_id = 1;
-        $res = $this->goodcar->addGoodCar($good_id, $store_id);
+        $store_id = isset($param['order_id']) ? 0: $store_id;
+        $order_id = isset($param['order_id']) ? $param['order_id'] : 0;
+        $res = $this->goodcar->addGoodCar($good_id, $store_id, $order_id);
         if ($res === false) {
             return \json(['code' => $this->goodcar->error()['code'], 'msg' => $this->goodcar->error()['msg']]);
         }
@@ -62,7 +65,8 @@ class Goods extends Common
         $param = Request::param();
         $res = $this->logic->changeGood($param);
         if($res === false) {
-            return \json(['code' => $this->order->error()['code'], 'msg' => $this->order->error()['msg']]);
+            return \json(['code' => $this->logic->error()['code'], 'msg' => $this->logic->error()['msg']]);
         }
+        return \json(['code' => 200, 'msg' => '修改成功']);
     }
 }
